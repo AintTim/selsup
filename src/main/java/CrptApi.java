@@ -25,7 +25,6 @@ public class CrptApi {
         /*
             Не совсем ясно из условия, где используется подпись документа
          */
-        limiter.acquire();
         return post(Method.LK_DOCUMENT_CREATE, writeObjectAsJsonString(document));
     }
 
@@ -39,7 +38,8 @@ public class CrptApi {
         }
     }
 
-    protected Response post(Method method, String jsonStringBody) {
+    private Response post(Method method, String jsonStringBody) {
+        limiter.acquire()
         return RestAssured.given().body(jsonStringBody).contentType(ContentType.JSON).post(base.resolve(method.method));
     }
 
